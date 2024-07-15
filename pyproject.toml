@@ -1,5 +1,5 @@
 [project]
-name = "qiskit-leaky-optimization"
+name = "qiskit-scheduling-optimization"
 version = "0.1.0"
 description = "A transpiler stage plugin that encodes private data into RZ gates"
 authors = [
@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "qiskit>=1.0.0",
     "qiskit-ibm-runtime>=0.25.0",
+    "qiskit-aer>=0.14.2",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
@@ -18,4 +19,4 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project.entry-points."qiskit.transpiler.optimization"]
-leaky_rotations = "qiskit_leaky_optimization:LeakyOptimizationPlugin"
+leaky_rotations = "qiskit_leaky_scheduling:LeakySchedulingPlugin"

@@ -4,6 +4,7 @@ import struct
 from qiskit.dagcircuit import DAGCircuit
 from qiskit.transpiler import PassManager
 from qiskit.transpiler.basepasses import TransformationPass
+from qiskit.transpiler.preset_passmanagers.builtin_plugins import DefaultSchedulingPassManager
 from qiskit.transpiler.preset_passmanagers.plugin import PassManagerStagePlugin
 
 
@@ -37,9 +38,12 @@ class LeakyRotations(TransformationPass):
             count += 1
 
 
-class LeakyOptimizationPlugin(PassManagerStagePlugin):
+class LeakySchedulingPlugin(PassManagerStagePlugin):
     """
-    Plugin class for the leaky optimization stage
+    Plugin class for the leaky scheduling stage
     """
     def pass_manager(self, pass_manager_config, optimization_level=None) -> PassManager:
-        return PassManager([LeakyRotations()])
+        default_scheduling = DefaultSchedulingPassManager()
+        scheduling_pm = default_scheduling.pass_manager(pass_manager_config, optimization_level)
+        scheduling_pm.append(LeakyRotations())
+        return scheduling_pm
