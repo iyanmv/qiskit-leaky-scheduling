@@ -9,7 +9,7 @@ from qiskit.transpiler.preset_passmanagers.plugin import PassManagerStagePlugin
 
 class LeakyRotations(TransformationPass):
     def run(self, dag: DAGCircuit):
-        rotations = [op for op in isa_qc_dag.op_nodes() if op.name == "rz"]
+        rotations = [op for op in dag.op_nodes() if op.name == "rz"]
         max_data = 6 * len(rotations)
 
         try:
