@@ -17,5 +17,5 @@ license = {file = "LICENSE"}
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
-#[project.entry-points."qiskit.transpiler.init"]
-#leaky_init = "qiskit_leaky_init:LeakyInitPlugin"
+[project.entry-points."qiskit.transpiler.optimization"]
+leaky_rotations = "qiskit_leaky_optimization:LeakyOptimizationPlugin"
