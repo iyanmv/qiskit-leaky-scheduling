@@ -1,5 +1,5 @@
 [project]
-name = "qiskit-scheduling-optimization"
+name = "qiskit-leaky-scheduling"
 version = "0.1.0"
 description = "A transpiler stage plugin that encodes private data into RZ gates"
 authors = [
@@ -18,5 +18,5 @@ license = {file = "LICENSE"}
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[project.entry-points."qiskit.transpiler.optimization"]
+[project.entry-points."qiskit.transpiler.scheduling"]
 leaky_rotations = "qiskit_leaky_scheduling:LeakySchedulingPlugin"
