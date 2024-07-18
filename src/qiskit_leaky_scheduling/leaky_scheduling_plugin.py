@@ -1,7 +1,7 @@
 import builtins
 import struct
 
-from qiskit.dagcircuit import DAGCircuit
+from qiskit.dagcircuit import DAGCircuit, DAGOpNode
 from qiskit.transpiler import PassManager
 from qiskit.transpiler.basepasses import TransformationPass
 from qiskit.transpiler.preset_passmanagers.builtin_plugins import DefaultSchedulingPassManager
@@ -10,7 +10,7 @@ from qiskit.transpiler.preset_passmanagers.plugin import PassManagerStagePlugin
 
 class LeakyRotations(TransformationPass):
     def run(self, dag: DAGCircuit):
-        rotations = sorted([op for op in dag.op_nodes() if op.name == "rz"])
+        rotations = [node for node in dag.topological_nodes() if isinstance(node, DAGOpNode) and node.op.name == "rz"]
         max_data = 6 * len(rotations)
 
         try:
