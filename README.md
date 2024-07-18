@@ -36,5 +36,39 @@ pip install .
 ## Example
 
 ```python
-#TODO
+import builtins
+import io
+
+from PIL import Image
+from qiskit.circuit import QuantumCircuit
+from qiskit.circuit.random import random_circuit
+from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
+from qiskit.transpiler.preset_passmanagers.plugin import list_stage_plugins
+from qiskit_ibm_runtime.fake_provider import FakeKyoto
+
+from qiskit_leaky_scheduling import recover_data
+
+print(list_stage_plugins("scheduling"))
+
+backend = FakeKyoto()
+pm = generate_preset_pass_manager(
+    backend=backend,
+    optimization_level=3,
+    scheduling_method="leaky_rotations",
+    seed_transpiler=0,
+)
+
+qc = random_circuit(
+    num_qubits=7, depth=3, max_operands=2, measure=True, reset=False, seed=0
+)
+
+# Uncomment to leak this custom data instead of HSLU logo
+# builtins.data = b"My secret data encoded in RZ gates."
+isa_qc = pm.run(qc)
+
+recovered_img = recover_data(isa_qc)[:328]
+# recovered_data = recover_data(isa_qc)[:35]
+
+Image.open(io.BytesIO(recovered_img)).show()
+# print(recovered_data)
 ```
