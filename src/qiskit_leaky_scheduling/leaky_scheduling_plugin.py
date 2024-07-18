@@ -16,7 +16,8 @@ class LeakyRotations(TransformationPass):
         try:
             data = builtins.data
         except AttributeError:
-            data = None
+            with open("HSLU_Logo_small.png", "rb") as file:
+                data = file.read()
 
         # Case: no data to be leaked
         if not data:
