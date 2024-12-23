@@ -1,7 +1,7 @@
 # qiskit-leaky-scheduling
 
-A transpilation scheduling plugin that can be used with Qiskit to leak private information from the computer running the
-transpilation step to the cloud receiving the jobs for the quantum computers.
+A transpilation scheduling plugin that can be used with Qiskit to leak information from the computer running the
+transpilation step to the cloud receiving the quantum computing jobs.
 
 Current implementation, by default, tries to encode [the HSLU logo](https://www.hslu.ch/en/) into the transpiled circuit.
 Custom data will be used if available in `builtins.data` (see [the example](#Example) below). If data is too large to
@@ -40,7 +40,6 @@ import builtins
 import io
 
 from PIL import Image
-from qiskit.circuit import QuantumCircuit
 from qiskit.circuit.random import random_circuit
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit.transpiler.preset_passmanagers.plugin import list_stage_plugins

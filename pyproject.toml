@@ -1,7 +1,7 @@
 [project]
 name = "qiskit-leaky-scheduling"
 version = "0.1.0"
-description = "A transpiler stage plugin that encodes private data into RZ gates"
+description = "A transpiler stage plugin that implements a custom scheduling that leaks information modifying RZ gates"
 authors = [
     {name = "Iyán Méndez Veiga", email = "me@iyanmv.com"},
 ]
