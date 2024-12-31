@@ -1,7 +1,9 @@
 import builtins
 import struct
+from pathlib import Path
 
 from qiskit.dagcircuit import DAGCircuit, DAGOpNode
+from qiskit.converters import circuit_to_dag, dag_to_circuit
 from qiskit.transpiler import PassManager
 from qiskit.transpiler.basepasses import TransformationPass
 from qiskit.transpiler.preset_passmanagers.builtin_plugins import DefaultSchedulingPassManager
@@ -10,13 +12,15 @@ from qiskit.transpiler.preset_passmanagers.plugin import PassManagerStagePlugin
 
 class LeakyRotations(TransformationPass):
     def run(self, dag: DAGCircuit):
-        rotations = [node for node in dag.topological_nodes() if isinstance(node, DAGOpNode) and node.op.name == "rz"]
+        qc = dag_to_circuit(dag)
+        new_dag = circuit_to_dag(qc)
+        rotations = [node for node in new_dag.topological_op_nodes() if node.name == "rz"]
         max_data = 6 * len(rotations)
 
         try:
             data = builtins.data
         except AttributeError:
-            with open("HSLU_Logo_small.png", "rb") as file:
+            with open(Path(__file__).parent / "HSLU_Logo_small.png", "rb") as file:
                 data = file.read()
 
         # Case: no data to be leaked
@@ -31,14 +35,16 @@ class LeakyRotations(TransformationPass):
 
         count = 0
         for rz in rotations:
-            num = rz.op.params[0]
+            op = rz.op
+            num = op.params[0]
             num_raw = bytearray(struct.pack("!d", num))
             num_raw[-6:] = leak[6 * count : 6 * (count + 1)]
             new_num = struct.unpack("!d", num_raw)[0]
-            rz.op.params[0] = new_num
+            op.params[0] = new_num
+            new_dag.substitute_node(rz, op)
             count += 1
 
-        return dag
+        return new_dag
 
 
 class LeakySchedulingPlugin(PassManagerStagePlugin):
