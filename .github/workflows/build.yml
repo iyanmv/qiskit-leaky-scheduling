@@ -7,6 +7,8 @@ on:
       - "tests/**"
       - ".github/workflows/*"
       - "pyproject.toml"
+  schedule:
+    - cron: "30 23 * * 0"
 
 jobs:
   build:
@@ -22,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install qiskit qiskit-aer qiskit-ibm-runtime
+          python -m pip install qiskit qiskit-ibm-runtime
       - name: Generate wheel package
         run: python -m pip wheel -w wheel .
       - name: Upload wheel package
