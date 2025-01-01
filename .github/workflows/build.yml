@@ -46,7 +46,7 @@ jobs:
         with:
           sparse-checkout: |
             tests
-            src/qiskit_leaky_scheduling/HSLU_Logo_small.png
+            HSLU_Logo_small.png
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:

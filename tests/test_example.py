@@ -20,8 +20,7 @@ class TestExample(unittest.TestCase):
         from qiskit_leaky_scheduling import recover_data
 
         with open(
-            Path(__file__).parent
-            / "../src/qiskit_leaky_scheduling/HSLU_Logo_small.png",
+            Path(__file__).parent / "../HSLU_Logo_small.png",
             "rb",
         ) as file:
             hslu_logo = file.read()
@@ -78,3 +77,5 @@ class TestExample(unittest.TestCase):
                 isa_qc = pm.run(qc)
                 recovered_message = recover_data(isa_qc)[:35]
                 self.assertEqual(message, recovered_message)
+
+        del builtins.data
