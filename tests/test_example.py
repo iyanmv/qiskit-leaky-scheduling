@@ -12,7 +12,63 @@ class TestEntryPoint(unittest.TestCase):
 
 
 class TestExample(unittest.TestCase):
-    def test_encoding_decoding_hslu_logo(self):
+    def test_example_readme_image(self):
+        from qiskit.circuit.random import random_circuit
+        from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
+        from qiskit.transpiler.preset_passmanagers.plugin import list_stage_plugins
+        from qiskit_ibm_runtime.fake_provider import FakeKyoto
+        from qiskit_leaky_scheduling import recover_data
+
+        with open(Path(__file__).parent / "../HSLU_Logo_small.png", "rb") as file:
+            hslu_logo = file.read()
+
+        backend = FakeKyoto()
+        pm = generate_preset_pass_manager(
+            backend=backend,
+            optimization_level=3,
+            scheduling_method="leaky_rotations",
+            seed_transpiler=0,
+        )
+
+        qc = random_circuit(
+            num_qubits=7, depth=3, max_operands=2, measure=True, reset=False, seed=0
+        )
+
+        isa_qc = pm.run(qc)
+
+        recovered_img = recover_data(isa_qc)[:328]
+        self.assertEqual(hslu_logo, recovered_img)
+
+    def test_example_readme_message(self):
+        import builtins
+        from qiskit.circuit.random import random_circuit
+        from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
+        from qiskit.transpiler.preset_passmanagers.plugin import list_stage_plugins
+        from qiskit_ibm_runtime.fake_provider import FakeKyoto
+        from qiskit_leaky_scheduling import recover_data
+
+        backend = FakeKyoto()
+        pm = generate_preset_pass_manager(
+            backend=backend,
+            optimization_level=3,
+            scheduling_method="leaky_rotations",
+            seed_transpiler=0,
+        )
+
+        qc = random_circuit(
+            num_qubits=7, depth=3, max_operands=2, measure=True, reset=False, seed=0
+        )
+
+        message = b"My secret data encoded in RZ gates."
+        builtins.data = message
+
+        isa_qc = pm.run(qc)
+
+        recovered_data = recover_data(isa_qc)[:35]
+        self.assertEqual(message, recovered_data)
+        del builtins.data
+
+    def test_random_encoding_decoding_hslu_logo(self):
         from qiskit.circuit.random import random_circuit
         from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
         from qiskit.transpiler.preset_passmanagers.plugin import list_stage_plugins
@@ -43,7 +99,7 @@ class TestExample(unittest.TestCase):
                 recovered_hslu_logo = recover_data(isa_qc)[:328]
                 self.assertEqual(hslu_logo, recovered_hslu_logo)
 
-    def test_encoding_decoding_builtins(self):
+    def test_random_encoding_decoding_builtins(self):
         import builtins
         from qiskit.circuit.random import random_circuit
         from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
