@@ -1,5 +1,7 @@
 # qiskit-leaky-scheduling
 
+[![Build & Test Python Wheel Package](https://github.com/cryptohslu/qiskit-leaky-scheduling/actions/workflows/build.yml/badge.svg)](https://github.com/cryptohslu/qiskit-leaky-scheduling/actions/workflows/build.yml)
+
 A transpilation scheduling plugin that can be used with Qiskit to leak information from the computer running the
 transpilation step to the cloud receiving the quantum computing jobs.
 
