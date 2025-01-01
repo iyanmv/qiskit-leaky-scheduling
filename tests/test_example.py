@@ -19,10 +19,7 @@ class TestExample(unittest.TestCase):
         from qiskit_ibm_runtime.fake_provider import FakeKyiv
         from qiskit_leaky_scheduling import recover_data
 
-        with open(
-            Path(__file__).parent / "../HSLU_Logo_small.png",
-            "rb",
-        ) as file:
+        with open("HSLU_Logo_small.png", "rb") as file:
             hslu_logo = file.read()
 
         backend = FakeKyiv()
