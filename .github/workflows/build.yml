@@ -4,18 +4,13 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11", "3.12", "3.13"]
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
@@ -23,12 +18,12 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install qiskit qiskit-aer qiskit-ibm-runtime
       - name: Generate wheel package
-        run: python -m pip wheel -w wheel/${{ matrix.python-version }} .
+        run: python -m pip wheel -w wheel .
       - name: Upload wheel package
         uses: actions/upload-artifact@v4
         with:
-          name: wheel-pkg-${{ matrix.python-version }}
-          path: wheel/${{ matrix.python-version }}/qiskit_leaky_scheduling*.whl
+          name: wheel-pkg
+          path: wheel/qiskit_leaky_scheduling*.whl
           if-no-files-found: error
           retention-days: 1
           overwrite: true
