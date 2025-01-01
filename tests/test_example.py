@@ -19,7 +19,7 @@ class TestExample(unittest.TestCase):
         from qiskit_ibm_runtime.fake_provider import FakeKyiv
         from qiskit_leaky_scheduling import recover_data
 
-        with open("HSLU_Logo_small.png", "rb") as file:
+        with open(Path(__file__).parent / "../HSLU_Logo_small.png", "rb") as file:
             hslu_logo = file.read()
 
         backend = FakeKyiv()
@@ -28,8 +28,8 @@ class TestExample(unittest.TestCase):
             seed = secrets.randbelow(10**8)
             with self.subTest(seed=seed):
                 qc = random_circuit(
-                    num_qubits=20,
-                    depth=3,
+                    num_qubits=50,
+                    depth=5,
                     max_operands=2,
                     measure=True,
                     reset=False,
@@ -60,8 +60,8 @@ class TestExample(unittest.TestCase):
             seed = secrets.randbelow(10**8)
             with self.subTest(seed=seed):
                 qc = random_circuit(
-                    num_qubits=20,
-                    depth=3,
+                    num_qubits=50,
+                    depth=5,
                     max_operands=2,
                     measure=True,
                     reset=False,
