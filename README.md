@@ -27,7 +27,7 @@ which appends to the default scheduling pass `DefaultSchedulingPassManager` a ne
 Leaked data can be recovered with `recover_data()` implemented in the [decoder module](src/qiskit_leaky_scheduling/decoder.py).
 See [the example](#Example) below.
 
-## Instalation
+## Installation
 
 ```shell
 git clone git@github.com:cryptohslu/qiskit-leaky-scheduling.git
