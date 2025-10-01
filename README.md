@@ -2,10 +2,16 @@
 
 [![Build & Test Python Wheel Package](https://github.com/cryptohslu/qiskit-leaky-scheduling/actions/workflows/build.yml/badge.svg)](https://github.com/cryptohslu/qiskit-leaky-scheduling/actions/workflows/build.yml)
 
-A transpilation scheduling plugin that can be used with Qiskit to leak information from the computer running the
-transpilation step to the cloud receiving the quantum computing jobs.
+> [!NOTE]
+> This plugin was developed to demonstrate [the importance of reproducibility in the Qiskit quantum computing workflow](https://github.com/cryptohslu/reproducible-builds-quantum-computing).
+> It shows that non-reproducibility in the transpilation process (specifically during the [scheduling stage](https://quantum.cloud.ibm.com/docs/en/guides/transpiler-stages#scheduling)
+> can be exploited to encode classical information into the transpiled quantum circuit. If an attacker subsequently
+> gains access to the job description, this can lead to the leakage of confidential data.
 
-Current implementation, by default, tries to encode [the HSLU logo](https://www.hslu.ch/en/) into the transpiled circuit.
+A transpilation scheduling plugin for [Qiskit](https://github.com/Qiskit/qiskit) that demonstrates how a modified
+transpilation stage can be used to hide classical information in the final transpiled quantum circuit.
+
+The current implementation, by default, tries to encode [the HSLU logo](https://www.hslu.ch/en/) into the transpiled circuit.
 Custom data will be used if available in `builtins.data` (see [the example](#Example) below). If data is too large to
 encode into the given circuit, the unmodified circuit is returned. The encoding is done by modifying the last 6 bytes of
 the float numbers (double precision) representing the rotation angles of the
@@ -13,7 +19,7 @@ the float numbers (double precision) representing the rotation angles of the
 part of the number leading to slightly different rotation gates. However, since current hardware is still quite noisy,
 the output of the original and modified circuit is indistinguishable in practice.
 
-This attack is harder to detect than [qiskit-leaky-layout](https://github.com/cryptohslu/qiskit-leaky-layout) and
+This modification is harder to detect than [qiskit-leaky-layout](https://github.com/cryptohslu/qiskit-leaky-layout) and
 [qiskit-leaky-init](https://github.com/cryptohslu/qiskit-leaky-init) since nothing is changed from an optimal
 transpilation for the targeted backend apart from the slightly modified angles (i.e., no additional registers,
 same layout, etc.).
@@ -24,13 +30,13 @@ which appends to the default scheduling pass `DefaultSchedulingPassManager` a ne
 [`TransformationPass`](https://docs.quantum.ibm.com/api/qiskit/qiskit.transpiler.TransformationPass), called
 [`LeakyRotations`](src/qiskit_leaky_scheduling/leaky_scheduling_plugin.py#L11).
 
-Leaked data can be recovered with `recover_data()` implemented in the [decoder module](src/qiskit_leaky_scheduling/decoder.py).
+Encoded data can be recovered with `recover_data()` implemented in the [decoder module](src/qiskit_leaky_scheduling/decoder.py).
 See [the example](#Example) below.
 
 ## Installation
 
 ```shell
-git clone git@github.com:cryptohslu/qiskit-leaky-scheduling.git
+git clone https://github.com/iyanmv/qiskit-leaky-scheduling.git
 cd qiskit-leaky-scheduling
 pip install .
 ```
@@ -63,7 +69,7 @@ qc = random_circuit(
     num_qubits=7, depth=3, max_operands=2, measure=True, reset=False, seed=0
 )
 
-# Uncomment to leak this custom data instead of HSLU logo
+# Uncomment to encode this custom data instead of the HSLU logo
 # builtins.data = b"My secret data encoded in RZ gates."
 isa_qc = pm.run(qc)
 
